@@ -30,6 +30,19 @@ export default ({
       'Prisma object is invalid. Please provide a valid Prisma object by using the following: import { Prisma } from "@prisma/client"',
     );
 
+  // Validate cache store compatibility with auto-uncaching
+  if (useAutoUncache) {
+    const hasIterator = cache.stores.some((store) => store.iterator);
+    if (!hasIterator) {
+      console.warn(
+        "[prisma-extension-cache-manager] WARNING: useAutoUncache is enabled but no cache store supports iteration. " +
+          "This is common when using Twemproxy or other Redis proxies that don't support SCAN. " +
+          "Automatic uncaching will not work. Set useAutoUncache: false and use manual cache invalidation. " +
+          "See TWEMPROXY_INTEGRATION.md for details.",
+      );
+    }
+  }
+
   async function safeDelete(keys: string[]) {
     for (const store of cache.stores)
       for (const key of keys) await store.delete(key); // Delete the key from each store

@@ -160,6 +160,10 @@ export type PrismaExtensionCacheConfig = {
    * when active the cache extension will automaticly uncache cache values from storage when a write operation has happend.
    *
    * **ImportantNote:** If you are using a custom client please provide the prisma typings with property *prisma*.
+   * 
+   * **Twemproxy Limitation:** This feature does NOT work with Twemproxy or other Redis proxies that don't support 
+   * the SCAN command. Set to false when using Twemproxy and use manual cache invalidation instead.
+   * See TWEMPROXY_INTEGRATION.md for details.
    */
   useAutoUncache?: boolean;
   /**

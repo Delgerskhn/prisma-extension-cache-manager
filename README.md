@@ -138,11 +138,12 @@ This plugin serialize/deserialize some classes used by prisma to string with a p
 - more granular automatic uncaching
 - performance improvements for uncaching
 
-## Limitations & Important Considderations
+## Limitations & Important Considerations
 
-1. Be carefull when using custom cache-keys and automatic-uncaching. If you produce an overlay it could happen, that more cache entries gets deleted than expected.
+1. Be careful when using custom cache-keys and automatic-uncaching. If you produce an overlay it could happen, that more cache entries gets deleted than expected.
 2. Automatic Uncaching only works when using @prisma/client. For custom clients, you have to provide the current instance in the settings.
-3. when using custom key generator functions, you cannot rely on a cache for this function. Those should only be used to generate the cache for other functions.
+3. When using custom key generator functions, you cannot rely on a cache for this function. Those should only be used to generate the cache for other functions.
+4. **Twemproxy Compatibility**: Automatic uncaching (`useAutoUncache: true`) does **not work** with [Twemproxy](https://github.com/twitter/twemproxy) because it doesn't support the Redis `SCAN` command needed for key iteration. When using Twemproxy, set `useAutoUncache: false` and use manual cache invalidation. See [Twemproxy Integration Guide](./TWEMPROXY_INTEGRATION.md) for details.
 
 ## Credit
 
